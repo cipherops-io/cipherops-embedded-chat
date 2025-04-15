@@ -602,7 +602,7 @@ video {
   justify-content: center;
   border-radius: 9999px;
   --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+  background-color: rgb(255 114 67 / var(--tw-bg-opacity));
   font-weight: 700;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -613,7 +613,7 @@ video {
 
 .cl-trigger:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+  background-color: rgb(204 91 54 / var(--tw-bg-opacity));
 }
 
 .cl-window {
@@ -682,11 +682,11 @@ video {
 }
 
 .cl-notsending-message {
-  stroke: #3b82f6;
+  stroke: #ff7243;
 }
 
 .cl-notsending-message:hover {
-  stroke: #60a5fa;
+  stroke: #dd6420;
 }
 
 .cl-sending-message {
@@ -816,7 +816,7 @@ video {
   border-radius: 0.75rem;
   border-top-right-radius: 0.125rem;
   --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+  background-color: rgb(255 114 67 / var(--tw-bg-opacity));
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
