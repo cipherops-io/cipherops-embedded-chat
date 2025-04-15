@@ -1,8 +1,8 @@
-# Langflow Embedded Chat ⛓️
+# Cipherops Embedded Chat ⛓️
 
-Welcome to the Langflow Embedded Chat repository! 🎉
+Welcome to the Langflow Cipherops Chat repository! 🎉
 
-The Langflow Embedded Chat is a powerful web component that enables seamless communication with the [Langflow ⛓️](https://github.com/logspace-ai/langflow). This widget provides a chat interface, allowing you to integrate Langflow ⛓️ into your web applications effortlessly.
+The Cipherops Embedded Chat is a powerful web component that enables seamless communication with the [Langflow ⛓️](https://github.com/logspace-ai/langflow). This widget provides a chat interface, allowing you to integrate Langflow ⛓️ into your web applications effortlessly.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
