@@ -5,7 +5,7 @@ import { ChatMessageType } from "../../types/chatWidget";
 import ChatMessage from "./chatMessage";
 import { sendMessage } from "../../controllers";
 import ChatMessagePlaceholder from "../../chatPlaceholder";
-
+import { parsed_response } from "../execute_range_query";
 export default function ChatWindow({
   api_key,
   flowId,
@@ -98,98 +98,114 @@ export default function ChatWindow({
       addMessage({ message: value, isSend: true });
       setSendingMessage(true);
       setValue("");
-      sendMessage(hostUrl, flowId, value, input_type, output_type, sessionId, output_component, tweaks, api_key, additional_headers)
-        .then((res) => {
-          const contents = res?.data?.outputs?.[0]?.outputs?.[0]?.results?.message?.content_blocks?.[0]?.contents;
+      // sendMessage(hostUrl, flowId, value, input_type, output_type, sessionId, output_component, tweaks, api_key, additional_headers)
+      //   .then((res) => {
+      //     // const contents = res?.data?.outputs?.[0]?.outputs?.[0]?.results?.message?.content_blocks?.[0]?.contents;
 
-          if (Array.isArray(contents)) {
-            contents.forEach((content, index) => {
-              console.log(`Content[${index}]:`, content);
+      //     // if (Array.isArray(contents)) {
+      //     //   contents.forEach((content, index) => {
+      //     //     console.log(`Content[${index}]:`, content);
+      //         const outputMessage = parsed_response;
 
-              if (
-                content?.type === "tool_use" &&
-                content?.name === "execute_range_query"
-              ) {
-                const outputMessage = content?.output?.content?.[0]?.text
-                addMessage({
-                  message:outputMessage,
-                  isSend: false,
-                  isPlot: true
-                });              
-              }
-            });
-          }
+      //         // if (
+      //         //   content?.type === "tool_use" &&
+      //         //   content?.name === "execute_range_query"
+      //         // ) {
+      //         //   const outputMessage = content?.output?.content?.[0]?.text
+      //           addMessage({
+      //             message:outputMessage,
+      //             isSend: false,
+      //             isPlot: true
+      //           });              
+      //         // }
+      //       // });
+      //     // }
           
-          if (
-            res.data &&
-            res.data.outputs &&
-            Object.keys(res.data.outputs).length > 0 &&
-            res.data.outputs[0].outputs && res.data.outputs[0].outputs.length > 0
-          ) {
-            const flowOutputs: Array<any> = res.data.outputs[0].outputs;
-            if (output_component &&
-              flowOutputs.map(e => e.component_id).includes(output_component)) {
-              Object.values(flowOutputs.find(e => e.component_id === output_component).outputs).forEach((output: any) => {
-                addMessage({
-                  message: extractMessageFromOutput(output),
-                  isSend: false,
-                });
-              })
-            } else if (
-              flowOutputs.length === 1
-            ) {
-              Object.values(flowOutputs[0].outputs).forEach((output: any) => {
-                addMessage({
-                  message: extractMessageFromOutput(output),
-                  isSend: false,
-                });
-              })
-            } else {
-              flowOutputs
-                .sort((a, b) => {
-                  // Get the earliest timestamp from each flowOutput's outputs
-                  const aTimestamp = Math.min(...Object.values(a.outputs).map((output: any) => Date.parse(output.message?.timestamp)));
-                  const bTimestamp = Math.min(...Object.values(b.outputs).map((output: any) => Date.parse(output.message?.timestamp)));
-                  return aTimestamp - bTimestamp; // Sort descending (newest first)
-                })
-                .forEach((flowOutput) => {
-                  Object.values(flowOutput.outputs).forEach((output: any) => {
-                    addMessage({
-                      message: extractMessageFromOutput(output),
-                      isSend: false,
-                    });
-                  });
-                });
-            }
-          }
-          if (res.data && res.data.session_id) {
-            sessionId.current = res.data.session_id;
-          }
-          setSendingMessage(false);
-        })
-        .catch((err) => {
-          const response = err.response;
-          if (err.code === "ERR_NETWORK") {
-            updateLastMessage({
-              message: "Network error",
-              isSend: false,
-              error: true,
-            });
-          } else if (
-            response &&
-            response.status === 500 &&
-            response.data &&
-            response.data.detail
-          ) {
-            updateLastMessage({
-              message: response.data.detail,
-              isSend: false,
-              error: true,
-            });
-          }
-          console.error(err);
-          setSendingMessage(false);
+      //     if (
+      //       res.data &&
+      //       res.data.outputs &&
+      //       Object.keys(res.data.outputs).length > 0 &&
+      //       res.data.outputs[0].outputs && res.data.outputs[0].outputs.length > 0
+      //     ) {
+      //       const flowOutputs: Array<any> = res.data.outputs[0].outputs;
+      //       if (output_component &&
+      //         flowOutputs.map(e => e.component_id).includes(output_component)) {
+      //         Object.values(flowOutputs.find(e => e.component_id === output_component).outputs).forEach((output: any) => {
+      //           addMessage({
+      //             message: extractMessageFromOutput(output),
+      //             isSend: false,
+      //           });
+      //         })
+      //       } else if (
+      //         flowOutputs.length === 1
+      //       ) {
+      //         Object.values(flowOutputs[0].outputs).forEach((output: any) => {
+      //           addMessage({
+      //             message: extractMessageFromOutput(output),
+      //             isSend: false,
+      //           });
+      //         })
+      //       } else {
+      //         flowOutputs
+      //           .sort((a, b) => {
+      //             // Get the earliest timestamp from each flowOutput's outputs
+      //             const aTimestamp = Math.min(...Object.values(a.outputs).map((output: any) => Date.parse(output.message?.timestamp)));
+      //             const bTimestamp = Math.min(...Object.values(b.outputs).map((output: any) => Date.parse(output.message?.timestamp)));
+      //             return aTimestamp - bTimestamp; // Sort descending (newest first)
+      //           })
+      //           .forEach((flowOutput) => {
+      //             Object.values(flowOutput.outputs).forEach((output: any) => {
+      //               addMessage({
+      //                 message: extractMessageFromOutput(output),
+      //                 isSend: false,
+      //               });
+      //             });
+      //           });
+      //       }
+      //     }
+      //     if (res.data && res.data.session_id) {
+      //       sessionId.current = res.data.session_id;
+      //     }
+      //     setSendingMessage(false);
+      //   })
+      //   .catch((err) => {
+      //     const response = err.response;
+      //     if (err.code === "ERR_NETWORK") {
+      //       updateLastMessage({
+      //         message: "Network error",
+      //         isSend: false,
+      //         error: true,
+      //       });
+      //     } else if (
+      //       response &&
+      //       response.status === 500 &&
+      //       response.data &&
+      //       response.data.detail
+      //     ) {
+      //       updateLastMessage({
+      //         message: response.data.detail,
+      //         isSend: false,
+      //         error: true,
+      //       });
+      //     }
+      //     console.error(err);
+      //     setSendingMessage(false);
+      //   });
+      setTimeout(() => {
+        // Add time series chart response
+        const outputMessage = parsed_response;
+        addMessage({
+          message: outputMessage,
+          isSend: false,
+          isPlot: true
         });
+        
+        // Set fake session ID
+        sessionId.current = "test-session-" + Date.now();
+        
+        // Clear loading state
+        setSendingMessage(false);
+      }, 800);
     }
   }
 

@@ -71,7 +71,7 @@ const TimeSeriesChart = ({ data }: { data: any }) => {
   
     const createPlot = () => {
       if (!chartRef.current) return;
-      const width = ((chartRef.current.clientWidth)/window.devicePixelRatio )*0.9;
+      const width = (chartRef.current.clientWidth)/window.devicePixelRatio;
       const height = (chartRef.current.clientHeight)/window.devicePixelRatio;
   
       const opts: uPlot.Options = {
@@ -164,8 +164,8 @@ export default function ChatMessage({
             ...bot_message_style,
             position: "relative",
             width: "100%",
-            height: "100%", // Adjust height as needed
-            overflow: "hidden", // Prevent the chart from overflowing the bubble
+            height: "250px", 
+            overflow: "hidden",
           }}
           className="cl-bot_message cl-plot_message mx-auto my-2"
         >
