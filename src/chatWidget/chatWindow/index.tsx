@@ -100,6 +100,26 @@ export default function ChatWindow({
       setValue("");
       sendMessage(hostUrl, flowId, value, input_type, output_type, sessionId, output_component, tweaks, api_key, additional_headers)
         .then((res) => {
+          const contents = res?.data?.outputs?.[0]?.outputs?.[0]?.results?.message?.content_blocks?.[0]?.contents;
+
+          if (Array.isArray(contents)) {
+            contents.forEach((content, index) => {
+              console.log(`Content[${index}]:`, content);
+
+              if (
+                content?.type === "tool_use" &&
+                content?.name === "execute_range_query"
+              ) {
+                const outputMessage = content?.output?.content?.[0]?.text
+                addMessage({
+                  message:outputMessage,
+                  isSend: false,
+                  isPlot: true
+                });              
+              }
+            });
+          }
+          
           if (
             res.data &&
             res.data.outputs &&
@@ -194,10 +214,25 @@ export default function ChatWindow({
         getAnimationOrigin(position) +
         (open ? " cl-scale-100" : " cl-scale-0")
       }
-      style={{ ...windowPosition, zIndex: 9999 }}
+      style={{ 
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 9999 
+      }}
     >
       <div
-        style={{ ...chat_window_style, width: width, height: height }}
+        style={{ 
+          ...chat_window_style, 
+          width: '100%',
+          height: '100%',
+          maxWidth: '100%',
+          maxHeight: '100%'
+        }}
         ref={ref}
         className="cl-window"
       >
@@ -227,6 +262,7 @@ export default function ChatWindow({
               message={message.message}
               isSend={message.isSend}
               error={message.error}
+              isPlot={message.isPlot}
             />
           ))}
           {sendingMessage && (
